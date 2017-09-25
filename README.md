@@ -13,9 +13,11 @@ Ideas and suggestions about architecture for hanami projects
 * IoC containers
   * How to load all dependencies
   * `Import` object
+  * Testing
 * Interactors, operations and what you need to use
   * Hanami-Interactors
   * Dry-transactions
+  * Testing
 * Domain services
 * Service objects, workers
 * Event sourcing
@@ -41,6 +43,7 @@ If you alllication include custom middleware it should be in apps/app\_name/midd
 We suggest to use [dry-containers](http://dry-rb.org/gems/dry-container/) for working with containers:
 
 ```ruby
+# in lib/container.rb
 require 'dry-container'
 
 class Container
@@ -65,6 +68,7 @@ Container['worders.approve_task']
 You can initialize dependencies with different config:
 
 ```ruby
+# in lib/container.rb
 require 'dry-container'
 
 class Container
@@ -78,6 +82,39 @@ end
 ### How to load all dependencies
 
 ### `Import` object
+For loading dependencies to other classes use `dry-auto\_inject` gem. For this you need to create `Import` object:
+
+```ruby
+# in lib/container.rb
+require 'dry-container'
+require 'dry-auto_inject'
+
+class Container
+  extend Dry::Container::Mixin
+
+  # ...
+end
+
+Import = Dry::AutoInject(Container)
+```
+
+After that you can import any dependency in to other class:
+
+```ruby
+module Admin::Controllers::User
+  class Update
+    include Admin::Action
+    include Import['repositories.user']
+
+    def call(params)
+      user = user.update(params[:id], params[:user])
+      redirect_to routes.user_path(user.id)
+    end
+  end
+end
+```
+
+### Testing
 
 ## Interactors, operations and what you need to use
 
