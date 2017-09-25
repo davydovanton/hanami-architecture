@@ -115,6 +115,28 @@ end
 ```
 
 ### Testing
+For testing you code with dependencies you can use two ways.
+
+The first, DI:
+```ruby
+let(:action) { Admin::Controllers::User::Update.new(user: MockUserRepository.new) }
+
+it { expect(action.call(payload)).to be_success }
+```
+
+The second, mock:
+```ruby
+require 'dry/container/stub'
+
+Container.enable_stubs!
+Container.stub('repositories.user') { MockUserRepository.new }
+
+let(:action) { Admin::Controllers::User::Update.new }
+
+it { expect(action.call(payload)).to be_success }
+```
+
+We suggest to use mocks only for not DI dependencies like persistance connections.
 
 ## Interactors, operations and what you need to use
 
