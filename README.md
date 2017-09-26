@@ -25,7 +25,7 @@ Ideas and suggestions about architecture for hanami projects
 ## Application rules
 All logic for displaing data should be in applications.
 
-If you alllication include custom middleware it should be in apps/app\_name/middlewares/ folder
+If you alllication include custom middleware it should be in apps/app_name/middlewares/ folder
 
 ### API
 
@@ -82,7 +82,7 @@ end
 ### How to load all dependencies
 
 ### `Import` object
-For loading dependencies to other classes use `dry-auto\_inject` gem. For this you need to create `Import` object:
+For loading dependencies to other classes use `dry-auto_inject` gem. For this you need to create `Import` object:
 
 ```ruby
 # in lib/container.rb
@@ -192,7 +192,7 @@ module Admin::Controllers::User
   class Update
     include Admin::Action
     # wrong, private object
-    include Import['users.services.calculate\_something']
+    include Import['users.services.calculate_something']
 
     # good, public object
     include Import['users.interactor.update']
