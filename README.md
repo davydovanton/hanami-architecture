@@ -12,6 +12,7 @@ Ideas and suggestions about architecture for hanami projects
     * View objects
 * IoC containers
   * How to load all dependencies
+  * How to load system dependencies
   * `Import` object
   * Testing
 * Interactors, operations and what you need to use
@@ -80,6 +81,8 @@ end
 ```
 
 ### How to load all dependencies
+
+### How to load system dependencies
 
 ### `Import` object
 For loading dependencies to other classes use `dry-auto_inject` gem. For this you need to create `Import` object:
