@@ -145,6 +145,64 @@ We suggest to use mocks only for not DI dependencies like persistance connection
 ### Dry-transactions
 
 ## Domain services
+We have applications for different logic. That's why we suggest to use DDD and split you logic to separate domains. All this domains should be in `/lib` folder and looks like:
+
+```
+/lib
+  /users
+    /interactors
+    /libs
+
+  /books
+    /interactors
+    /libs
+
+  /orders
+    /interactors
+    /libs
+```
+
+
+Each domain should have specific namespace in container:
+```ruby
+# in lib/container.rb
+require 'dry-container'
+
+class Container
+  extend Dry::Container::Mixin
+
+  namespace('users') do
+    namespace('interactors') do
+      # ...
+    end
+
+    namespace('services') do
+      # ...
+    end
+
+    # ...
+  end
+end
+```
+
+Each domain should have public interactor objects for calling from apps or other places (like workers_) and private objects as a libraries:
+
+```ruby
+module Admin::Controllers::User
+  class Update
+    include Admin::Action
+    # wrong, private object
+    include Import['users.services.calculate\_something']
+
+    # good, public object
+    include Import['users.interactor.update']
+
+    def call(params)
+      # ...
+    end
+  end
+end
+```
 
 ## Service objects, workers
 
