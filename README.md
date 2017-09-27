@@ -21,6 +21,8 @@ Ideas and suggestions about architecture for hanami projects
   * Testing
 * Domain services
 * Service objects, workers
+* Models
+  * Command pattern
 * Event sourcing
 
 ## Application rules
