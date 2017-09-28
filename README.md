@@ -199,7 +199,46 @@ We suggest using mocks only for not DI dependencies like persistent connections.
 
 ## Interactors, operations and what you need to use
 
+Interactors, operations and other "functional objects" needs for saving your buisnes logic and they provide publick API for working with domains from other parts of hanami project. Also, from this objects you can call other "private" objects like service or lib.
+
 ### Hanami-Interactors
+Interactors returns object with state and data:
+```ruby
+# in lib/users/interactors/signup
+require 'hanami/interactor'
+
+class Users::Intecators::Signup
+  include Hanami::Interactor
+  expose :user
+
+  def initialize(params)
+    @params = params
+  end
+
+  def call
+    find_user!
+    singup!
+  end
+
+  private
+
+  def find_user!
+    @user = UserRepository.new.create(@params)
+    error "User not foound" unless @user
+  end
+
+  def singup!
+    Users::Services::Signup.new.call(@user)
+  end
+end
+
+result = User::Intecators::Signup.new(login: 'Anton').call
+result.successful? # => true
+result.errors # => []
+```
+
+Links:
+* https://github.com/hanami/utils/blob/master/lib/hanami/interactor.rb
 
 ### Dry-transactions
 
