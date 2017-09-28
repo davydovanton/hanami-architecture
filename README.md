@@ -260,8 +260,12 @@ We have applications for different logic. That's why we suggest using DDD and sp
     /libs
 ```
 
+Each domain have "public" and "private" classes. Also, you can call "public" classes from apps and core finctionality (`lib/project_name/**/*.rb` folder) from domains.
+
+![hanami-project](https://github.com/davydovanton/hanami-architecture/blob/master/images/project.png?raw=true)
 
 Each domain should have a specific namespace in a container:
+
 ```ruby
 # in lib/container.rb
 require 'dry-container'
