@@ -74,8 +74,6 @@ module Api::Controllers::Issue
 end
 ```
 
-### View
-
 ### API
 
 #### Serializers
@@ -131,6 +129,16 @@ end
 ### How to load all dependencies
 
 ### How to load system dependencies
+For loading system dependencies you can use 2 ways:
+1. put all this code to `config/initializers/*`
+2. use [dry-system](http://dry-rb.org/gems/dry-system/)
+
+#### Dry-system
+This libraty provide a simple way to load your dependency to container. For example you can load redis client or API clients here. Check this links as a example:
+* https://github.com/ossboard-org/ossboard/tree/master/system
+* https://github.com/hanami/contributors/tree/master/system
+
+After that you can use container for other classes.
 
 ### `Import` object
 For loading dependencies to other classes use `dry-auto_inject` gem. For this you need to create `Import` object:
