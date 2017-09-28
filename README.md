@@ -31,11 +31,48 @@ Ideas and suggestions about architecture for hanami projects
 * Event sourcing
 
 ## Application rules
-All logic for displaing data should be in applications.
+All logic for displaying data should be in applications.
 
-If you alllication include custom middleware it should be in apps/app_name/middlewares/ folder
+If your application include custom middleware, it should be in apps/app_name/middlewares/ folder
 
 ### Actions
+Actions it's just a transport layer of hanami projects. Here you can put:
+1. request logic
+2. call business logic (like services, interactors or operations)
+3. Sereliaze response
+4. Validate data from users
+5. Call simple repository logic (but you need to understand that it'll create tech debt in your project)
+
+```ruby
+module Api::Controllers::Issue
+  class Show
+    include Api::Action
+    include Import['tasks.interactors.issue_information']
+
+    params do
+      required(:issue_url).filled(:str?)
+    end
+
+    # bad, business logic here
+    def call(params)
+      if params[:action] == 'approve'
+        TaskRepository.new.update(params[:id], { approved: true })
+        ApproveTaskWorker.perform_async(params[:id])
+      else
+        TaskRepository.new.update(params[:id], { approved: false })
+      end
+
+      redirect_to routes.moderations_path
+    end
+
+    # good, we use intecator for updating task and sending some to background
+    def call(params)
+      TaskStatusUpdater.new(params[:id], params[:action]).call
+      redirect_to routes.moderations_path
+    end
+  end
+end
+```
 
 ### View
 
@@ -50,7 +87,7 @@ If you alllication include custom middleware it should be in apps/app_name/middl
 #### View objects
 
 ## IoC containers
-[IoC containers](https://gist.github.com/blairanderson/8072d951a480a590f0bd) is prefered way to work with project dependencies.
+[IoC containers](https://gist.github.com/blairanderson/8072d951a480a590f0bd) is preferred way to work with project dependencies.
 
 We suggest to use [dry-containers](http://dry-rb.org/gems/dry-container/) for working with containers:
 
@@ -129,7 +166,7 @@ end
 ```
 
 ### Testing
-For testing you code with dependencies you can use two ways.
+For testing your code with dependencies you can use two ways.
 
 The first, DI:
 ```ruby
@@ -150,7 +187,7 @@ let(:action) { Admin::Controllers::User::Update.new }
 it { expect(action.call(payload)).to be_success }
 ```
 
-We suggest to use mocks only for not DI dependencies like persistance connections.
+We suggest using mocks only for not DI dependencies like persistent connections.
 
 ## Interactors, operations and what you need to use
 
@@ -159,7 +196,7 @@ We suggest to use mocks only for not DI dependencies like persistance connection
 ### Dry-transactions
 
 ## Domain services
-We have applications for different logic. That's why we suggest to use DDD and split you logic to separate domains. All this domains should be in `/lib` folder and looks like:
+We have applications for different logic. That's why we suggest using DDD and split you logic to separate domains. All these domains should be in `/lib` folder and looks like:
 
 ```
 /lib
@@ -177,7 +214,7 @@ We have applications for different logic. That's why we suggest to use DDD and s
 ```
 
 
-Each domain should have specific namespace in container:
+Each domain should have a specific namespace in a container:
 ```ruby
 # in lib/container.rb
 require 'dry-container'
@@ -199,7 +236,7 @@ class Container
 end
 ```
 
-Each domain should have public interactor objects for calling from apps or other places (like workers_) and private objects as a libraries:
+Each domain should have public interactor objects for calling from apps or other places (like workers_) and private objects as libraries:
 
 ```ruby
 module Admin::Controllers::User
