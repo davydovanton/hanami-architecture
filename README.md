@@ -5,6 +5,8 @@ Ideas and suggestions about architecture for hanami projects
 ## Table of Contents
 
 * Application rules
+  * Actions
+  * View
   * API
     * Serializers
   * HTML
@@ -23,12 +25,19 @@ Ideas and suggestions about architecture for hanami projects
 * Service objects, workers
 * Models
   * Command pattern
+  * Repository
+  * Entity
+  * Changesets
 * Event sourcing
 
 ## Application rules
 All logic for displaing data should be in applications.
 
 If you alllication include custom middleware it should be in apps/app_name/middlewares/ folder
+
+### Actions
+
+### View
 
 ### API
 
