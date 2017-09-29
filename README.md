@@ -18,6 +18,7 @@ Ideas and suggestions about architecture for hanami projects
   * `Import` object
   * Testing
 * Interactors, operations and what you need to use
+  * When you need to use it
   * Hanami-Interactors
   * Dry-transactions
   * Testing
@@ -200,6 +201,8 @@ We suggest using mocks only for not DI dependencies like persistent connections.
 ## Interactors, operations and what you need to use
 
 Interactors, operations and other "functional objects" needs for saving your buisnes logic and they provide publick API for working with domains from other parts of hanami project. Also, from this objects you can call other "private" objects like service or lib.
+
+### When you need to use it
 
 ### Hanami-Interactors
 Interactors returns object with state and data:
