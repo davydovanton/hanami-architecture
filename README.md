@@ -75,6 +75,8 @@ module Api::Controllers::Issue
 end
 ```
 
+We will cover `Import` object in [`Import` object](https://github.com/davydovanton/hanami-architecture#import-object) section.
+
 ### API
 
 #### Serializers
