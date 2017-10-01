@@ -247,7 +247,26 @@ Links:
 
 ### Dry-transactions
 
-## Domain services
+## Domain services (simple way)
+Use interactors. Interactors are top level and verbs. A feature is directly mapped 1:1 with a use case/interactor.
+
+```
+Router => Action => Interactor
+```
+
+```ruby
+# Bad
+class A::Nested::Namespace::PublishStory
+end
+
+# Good
+class PublishStory
+end
+```
+
+Put all interactors to `lib/bookshelf/interactors` folder. And also, you can call services, repositories, etc from interactors.
+
+## Domain services (hard way)
 We have applications for different logic. That's why we suggest using DDD and split you logic to separate domains. All these domains should be in `/lib` folder and looks like:
 
 ```
