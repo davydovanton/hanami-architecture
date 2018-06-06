@@ -229,7 +229,7 @@ class Users::Intecators::Signup
 
   def find_user!
     @user = UserRepository.new.create(@params)
-    error "User not foound" unless @user
+    error "User not found" unless @user
   end
 
   def singup!
