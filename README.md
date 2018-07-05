@@ -79,7 +79,70 @@ We will cover `Import` object in [`Import` object](https://github.com/davydovant
 
 ### API
 
-#### Serializers
+#### Serializer
+
+Try to use https://github.com/nesaulov/surrealist with hanami-view presenters. For example:
+
+```ruby
+# in apps/v1/presenters/entities/user.rb
+
+require 'hanami/view'
+
+module V1
+  module Presenters
+    module Entities
+      class Price
+        include Surrealist
+        include Hanami::Presenter
+
+        json_schema do
+          {
+            id: Integer,
+            first_name: String,
+            last_name: String,
+            email: String
+          }
+        end
+
+      end
+    end
+  end
+end
+
+# in apps/v1/presenters/users/show.rb
+
+module V1
+  module Presenters
+    module Prices
+      class Show
+        include Surrealist
+
+        json_schema do
+          {
+            status: String,
+            user: Entities::User.defined_schema
+          }
+        end
+
+        attr_reader :user
+
+        # @example Base usage
+        #
+        #   user = User.new(name: 'Anton')
+        #   V1::Presenters::Users::Show.new(user).surrealize
+        #   # => { "status": "ok", "user": { "name": "Anton" } }
+        def initialize(user)
+          @user = Entities::Price.new(user)
+        end
+
+        def status
+          'ok'
+        end
+      end
+    end
+  end
+end
+```
 
 ### HTML
 
