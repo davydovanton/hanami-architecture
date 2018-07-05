@@ -91,7 +91,7 @@ require 'hanami/view'
 module V1
   module Presenters
     module Entities
-      class Price
+      class User
         include Surrealist
         include Hanami::Presenter
 
@@ -113,7 +113,7 @@ end
 
 module V1
   module Presenters
-    module Prices
+    module Users
       class Show
         include Surrealist
 
